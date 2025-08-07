@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Penguin - Blogs</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="bg-animation"></div>
+    
+    <nav>
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <i class="fas fa-terminal"></i>
+                Penguin
+            </a>
+            <ul class="nav-links">
+                <li><a href="index.html">
+                    <i class="fas fa-home"></i> Home
+                </a></li>
+                <li><a href="blog.html" class="active">
+                    <i class="fas fa-blog"></i> Blogs
+                </a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main>
+        <div class="blog-container">
+            <div class="blog-header">
+                <h1>My Projects & Insights</h1>
+                <p>Deep dives into tools, libraries, and low-level programming adventures</p>
+            </div>
+            
+            <div style="margin-bottom: 40px;">
+                <a href="index.html" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Back to Home
+                </a>
+            </div>
+            
+            <div id="blog-list" class="blog-grid">
+                <div class="loading">
+                    <div class="spinner"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Blog Content Modal -->
+        <div id="blog-modal" class="blog-modal">
+            <div class="blog-modal-content">
+                <div class="blog-modal-header">
+                    <button class="close-modal" onclick="closeBlogModal()">&times;</button>
+                </div>
+                <div class="blog-article" id="blog-article"></div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        function parseMarkdown(markdown) {
+            let html = markdown;
+            
+            html = html.replace(/^### (.*$)/gm, '<h3>$1</h3>');
+            html = html.replace(/^## (.*$)/gm, '<h2>$1</h2>');
+            html = html.replace(/^# (.*$)/gm, '<h1>$1</h1>');
+            
+            html = html.replace(/```(\w+)?\n([\s\S]*?)```/g, '<pre><code class="language-$1">$2</code></pre>');
+            
+            html = html.replace(/`([^`]+)`/g, '<code>$1</code>');
+            
+            html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank">$1</a>');
+            
+            html = html.replace(/!\[([^\]]*)\]\(([^)]+)\)/g, '<img src="$2" alt="$1" style="max-width: 100%; height: auto; border-radius: 12px; margin: 24px 0; box-shadow: 0 10px 30px rgba(0,0,0,0.3);">');
+            
+            html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+            html = html.replace(/\*(.*?)\*/g, '<em>$1</em>');
+            
+            html = html.replace(/^---$/gm, '<hr>');
+            
+            const lines = html.split('\n');
+            let inTable = false;
+            let tableRows = [];
+            
+            for (let i = 0; i < lines.length; i++) {
+                const line = lines[i].trim();
+                
+                if (line.includes('|') && line.startsWith('|') && line.endsWith('|')) {
+                    const cells = line.slice(1, -1).split('|').map(cell => cell.trim());
+                    
+                    if (cells.every(cell => /^:?-+:?$/.test(cell))) {
+                        continue; 
+                    }
+                    
+                    if (!inTable) {
+                        inTable = true;
+                        tableRows = [];
+                    }
+                    
+                    const isHeader = tableRows.length === 0;
+                    const tag = isHeader ? 'th' : 'td';
+                    const cellsHtml = cells.map(cell => `<${tag}>${cell}</${tag}>`).join('');
+                    tableRows.push(`<tr>${cellsHtml}</tr>`);
+                    
+                    lines[i] = ''; 
+                } else {
+                    if (inTable) {
+                        const tableHtml = `<table>${tableRows.join('')}</table>`;
+                        lines[i] = tableHtml + '\n' + line;
+                        inTable = false;
+                        tableRows = [];
+                    }
+                }
+            }
+            
+            if (inTable) {
+                html = lines.join('\n') + `<table>${tableRows.join('')}</table>`;
+            } else {
+                html = lines.join('\n');
+            }
+            
+            html = html.replace(/^> (.*$)/gm, '<blockquote>$1</blockquote>');
+            
+            html = html.replace(/\n\n/g, '</p><p>');
+            html = '<p>' + html + '</p>';
+            
+            html = html.replace(/<p><\/p>/g, '');
+            html = html.replace(/<p>(<h[1-6]>.*<\/h[1-6]>)<\/p>/g, '$1');
+            html = html.replace(/<p>(<hr>)<\/p>/g, '$1');
+            html = html.replace(/<p>(<table>.*<\/table>)<\/p>/gs, '$1');
+            html = html.replace(/<p>(<pre>.*<\/pre>)<\/p>/gs, '$1');
+            html = html.replace(/<p>(<blockquote>.*<\/blockquote>)<\/p>/g, '$1');
+            
+            return html;
+        }
+
+        async function loadBlogList() {
+            const blogList = document.getElementById('blog-list');
+            
+    
+            const response = await fetch('bloglist.json');
+            if (!response.ok) {
+                throw new Error('Could not load bloglist.json');
+            }
+                
+            const blogs = await response.json();
+                
+            blogList.innerHTML = blogs.map((blog, index) => `
+                <div class="blog-card" onclick="loadBlog('${blog.filename}', '${blog.title}')" style="--delay: ${index * 0.1}s">
+                    <h3>${blog.title}</h3>
+                    <p>${blog.description}</p>
+                    <div class="blog-meta">
+                        <div class="blog-date">
+                            <i class="fas fa-calendar"></i>
+                            ${new Date(blog.date).toLocaleDateString()}
+                        </div>
+                        <div class="blog-readtime">
+                            <i class="fas fa-clock"></i>
+                            ${blog.readTime || '5 min'} read
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        async function loadBlog(filename, title) {
+            const blogArticle = document.getElementById('blog-article');
+            const blogModal = document.getElementById('blog-modal');
+            
+            blogArticle.innerHTML = '<div class="loading"><div class="spinner"></div></div>';
+            blogModal.classList.add('active');
+            
+            const response = await fetch(`blogs/${filename}`);
+            if (!response.ok) throw new Error('Blog not found');
+                
+            const markdown = await response.text();
+            const html = parseMarkdown(markdown);
+                
+            blogArticle.innerHTML = `<h1>${title}</h1>${html}`;
+        }
+
+        function closeBlogModal() {
+            document.getElementById('blog-modal').classList.remove('active');
+        }
+
+        document.getElementById('blog-modal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeBlogModal();
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            loadBlogList();
+        });
+    </script>
+</body>
+</html>
