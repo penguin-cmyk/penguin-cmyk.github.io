@@ -18,7 +18,7 @@ Since I keep talking about them being so efficient, I think we would need to add
 
 ### Why do we use them
 
-In user-mode anti-cheats or anti-tamper (e.g. Byfron), raw `syscall` instructions are often used to read and write memory because they can sneak past the usual Windows APIs like `ReadProcessMemory`. Normally when a program calls RPM, it eventually goes trough  a chain of calls that lead into `NtReadVirtualMemory` in `ntdll.dll`, which itself makes a system call to the kernel. But since these "APIs" are well-known and commonly hooked or monitored by (um) anti-cheats, relying on them can easily get flagged.
+In user-mode anti-cheats or anti-tamper, raw `syscall` instructions are often used to read and write memory because they can sneak past the usual Windows APIs like `ReadProcessMemory`. Normally when a program calls RPM, it eventually goes trough  a chain of calls that lead into `NtReadVirtualMemory` in `ntdll.dll`, which itself makes a system call to the kernel. But since these "APIs" are well-known and commonly hooked or monitored by (um) anti-cheats, relying on them can easily get flagged.
 
 By using raw syscalls, you're basically invoking the system call number and jumping straight into kernel mode where the program avoids the um layers that are frequently patched or intercepted. 
 
