@@ -1,98 +1,172 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Penguin</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-    <div class="bg-animation"></div>
+    <title>Penguin — Systems Developer</title>
     
-    <nav>
-        <div class="nav-container">
-            <a href="index.html" class="logo">
-                <i class="fas fa-terminal"></i>
-                Penguin
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'ui-monospace', 'monospace'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+        body {
+            background-color: #09090b;
+            color: #fafafa;
+        }
+    </style>
+</head>
+<body class="font-sans antialiased min-h-screen flex flex-col selection:bg-zinc-800 selection:text-zinc-100">
+
+    <header class="sticky top-0 z-50 w-full border-b border-zinc-900 bg-[#09090b]/80 backdrop-blur-md">
+        <div class="max-w-3xl mx-auto px-4 h-14 flex items-center justify-between">
+            <a href="index.html" class="flex items-center gap-2 font-mono text-sm font-medium tracking-tight text-zinc-100 hover:text-zinc-300 transition-colors">
+                <i data-lucide="code" class="w-4 h-4 text-zinc-400"></i>
+                <span>penguin ~ $</span>
             </a>
-            <ul class="nav-links">
-                <li><a href="index.html" class="active">
-                    <i class="fas fa-home"></i> Home
-                </a></li>
-                <li><a href="blog.html">
-                    <i class="fas fa-blog"></i> Blogs
-                </a></li>
-            </ul>
+            <nav class="flex items-center gap-6">
+                <a href="index.html" class="text-sm font-medium text-zinc-100 transition-colors">Home</a>
+                <a href="blog.html" class="text-sm font-medium text-zinc-400 hover:text-zinc-100 transition-colors">Blogs</a>
+            </nav>
         </div>
-    </nav>
+    </header>
 
-    <main>
-        <section class="hero">
-            <div class="hero-content">
-                <div class="profile-section">
-                    <img src="https://avatars.githubusercontent.com/u/172081961?s=400&u=db39340eff586c49341927e4bbe9054add3c03a1&v=4" 
-                         alt="Penguin's Avatar" class="profile-img">
-                    <h1>Tool & Library Developer</h1>
-                    <p class="subtitle">17-year-old German developer creating utilities, libraries, and external tools with Rust, C & C++, Lua and Assembly</p>
+    <main class="flex-1 max-w-3xl w-full mx-auto px-4 py-16 md:py-24 space-y-20">
+
+        <section class="flex flex-col-reverse sm:flex-row items-start justify-between gap-8">
+            <div class="space-y-4 max-w-xl">
+                <div class="space-y-1.5">
+                    <div class="inline-flex items-center gap-1.5 rounded-full border border-zinc-800 bg-zinc-900/40 px-2.5 py-0.5 text-xs font-mono text-zinc-400">
+                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                        Germany
+                    </div>
+                    <h1 class="text-3xl font-bold tracking-tight text-zinc-50">Tool & Library Developer</h1>
+                </div>
+                
+                <p class="text-zinc-400 text-sm leading-relaxed">
+                    17-year-old developer creating memory utilities, low-level binary frameworks, and optimized external tools using 
+                    <span class="text-zinc-200 font-medium">Rust</span>, 
+                    <span class="text-zinc-200 font-medium">C/C++</span>, 
+                    <span class="text-zinc-200 font-medium">Lua(U)</span>, and 
+                    <span class="text-zinc-200 font-medium">Assembly</span>.
+                </p>
+
+                <div class="flex gap-4 font-mono text-xs text-zinc-500 pt-2">
+                    <div>LANGUAGES: <span class="text-zinc-300">5</span></div>
+                    <div>AGE: <span class="text-zinc-300">17</span></div>
                 </div>
 
-                <div class="hero-stats">
-                    <div class="stat">
-                        <span class="stat-number">5</span>
-                        <span class="stat-label">Languages</span>
-                    </div>
-                    <div class="stat">
-                        <span class="stat-number">17</span>
-                        <span class="stat-label">Age</span>
-                    </div>
+                <div class="flex items-center gap-3 pt-4">
+                    <a href="blog.html" class="inline-flex items-center justify-center rounded-md text-sm font-medium space-x-2 h-9 px-4 bg-zinc-100 text-zinc-950 hover:bg-zinc-200 transition-colors">
+                        <i data-lucide="terminal" class="w-4 h-4"></i>
+                        <span>Read Blogs</span>
+                    </a>
+                    <a href="#about" class="inline-flex items-center justify-center rounded-md text-sm font-medium space-x-2 h-9 px-4 border border-zinc-800 bg-transparent hover:bg-zinc-900 text-zinc-200 transition-colors">
+                        <span>Details</span>
+                    </a>
+                </div>
+            </div>
+
+            <div class="relative group shrink-0">
+                <img src="https://avatars.githubusercontent.com/u/172081961?s=400&u=db39340eff586c49341927e4bbe9054add3c03a1&v=4" 
+                     alt="Avatar" 
+                     class="w-24 h-24 sm:w-28 sm:h-28 rounded-lg object-cover border border-zinc-800 grayscale contrast-125 group-hover:grayscale-0 transition-all duration-300">
+            </div>
+        </section>
+
+        <section id="about" class="space-y-4">
+            <h2 class="text-sm font-medium tracking-wider text-zinc-500 uppercase">Overview</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                
+                <div class="rounded-lg border border-zinc-800 bg-zinc-900/20 p-4 space-y-1.5">
+                    <h3 class="text-sm font-medium flex items-center gap-2 text-zinc-200">
+                        <i data-lucide="user" class="w-3.5 h-3.5 text-zinc-400"></i> Profile
+                    </h3>
+                    <p class="text-xs text-zinc-400 leading-relaxed">
+                        I just like doing low level stuff
+                    </p>
                 </div>
 
-                <div class="cta-buttons">
-                    <a href="blog.html" class="btn btn-primary">
-                        <i class="fas fa-blog"></i> Read My Blogs
-                    </a>
-                    <a href="#about" class="btn btn-secondary" onclick="document.querySelector('.about-section').scrollIntoView()">
-                        <i class="fas fa-user"></i> Learn More
-                    </a>
+                <div class="rounded-lg border border-zinc-800 bg-zinc-900/20 p-4 space-y-1.5">
+                    <h3 class="text-sm font-medium flex items-center gap-2 text-zinc-200">
+                        <i data-lucide="help-circle" class="w-3.5 h-3.5 text-zinc-400"></i> Origin
+                    </h3>
+                    <p class="text-xs text-zinc-400 leading-relaxed">
+                        Adopted the handle "Penguin" back when Kowalski from Madagascar was my avatar, and the alias simply stuck over time.
+                    </p>
+                </div>
+
+            </div>
+        </section>
+
+        <section class="border-t border-zinc-900 pt-10 space-y-4">
+            <div class="space-y-1">
+                <h2 class="text-sm font-medium tracking-wider text-zinc-500 uppercase">Comms</h2>
+                <p class="text-xs text-zinc-400">Click the icon to copy details directly to your clipboard.</p>
+            </div>
+
+            <div class="max-w-sm rounded-lg border border-zinc-800 bg-zinc-900/20 divide-y divide-zinc-900 font-mono text-xs">
+                <div class="p-3 flex items-center justify-between group">
+                    <span class="text-zinc-500">Discord User</span>
+                    <div class="flex items-center gap-2 text-zinc-200">
+                        <span>sonicle</span>
+                        <button onclick="copyText('sonicle', 'user-icon')" class="text-zinc-500 hover:text-zinc-300 transition-colors p-1" title="Copy Username">
+                            <i id="user-icon" data-lucide="copy" class="w-3.5 h-3.5"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="p-3 flex items-center justify-between group">
+                    <span class="text-zinc-500">Snowflake ID</span>
+                    <div class="flex items-center gap-2 text-zinc-200">
+                        <span>993905675606425670</span>
+                        <button onclick="copyText('993905675606425670', 'id-icon')" class="text-zinc-500 hover:text-zinc-300 transition-colors p-1" title="Copy User ID">
+                            <i id="id-icon" data-lucide="copy" class="w-3.5 h-3.5"></i>
+                        </button>
+                    </div>
                 </div>
             </div>
         </section>
 
-        <section class="about-section" id="about">
-            <div class="about-grid">
-                <div class="about-card">
-                    <h3><i class="fas fa-code"></i> Who am I?</h3>
-                    <p>Hello! I'm Penguin, a 17-year-old developer from Germany who loves creating practical tools and libraries. I build memory utilities, string libraries, external game tools, and low-level applications using C, x86_64 assembly, Rust, and C++.</p>
-                </div>
-
-                <div class="about-card">
-                    <h3><i class="fas fa-lightbulb"></i> Why "Penguin"?</h3>
-                    <p>The name Penguin has a fun origin story. It started when I used Kowalski from "Penguins of Madagascar" as my profile picture. People began calling me "Penguin", and the name just stuck.</p>
-                </div>
-
-                <div class="about-card">
-                    <h3><i class="fas fa-tools"></i> What I Build</h3>
-                    <p>I specialize in creating practical tools: memory utilities for Windows, string processing libraries and more.</p>
-                </div>
-            </div>
-
-            <div class="contact-section">
-                <h3><i class="fab fa-discord"></i> Get in Touch</h3>
-                <p>Ready to collaborate or just want to chat about systems programming? Feel free to reach out!</p>
-                <div class="contact-items">
-                    <div class="contact-item">
-                        <i class="fas fa-user"></i>
-                        <span>atomicwaffle17</span>
-                    </div>
-                    <div class="contact-item">
-                        <i class="fas fa-id-badge"></i>
-                        <span>900683903780651008</span>
-                    </div>
-                </div>
-            </div>
-        </section>
     </main>
-</body>
 
+    <footer class="border-t border-zinc-900 bg-zinc-950 py-6 text-center font-mono text-[10px] text-zinc-600">
+        &copy; 2026 Penguin. All rights reserved.
+    </footer>
+
+    <script>
+        lucide.createIcons();
+
+        function copyText(text, iconId) {
+            navigator.clipboard.writeText(text).then(() => {
+                const icon = document.getElementById(iconId);
+                if (icon) {
+                    icon.setAttribute('data-lucide', 'check');
+                    icon.classList.remove('text-zinc-500');
+                    icon.classList.add('text-emerald-500');
+                    lucide.createIcons();
+                    
+                    setTimeout(() => {
+                        icon.setAttribute('data-lucide', 'copy');
+                        icon.classList.remove('text-emerald-500');
+                        icon.classList.add('text-zinc-500');
+                        lucide.createIcons();
+                    }, 1500);
+                }
+            });
+        }
+    </script>
+</body>
 </html>
